@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Cleaning Schedule",
+    "version": "1.0",
+    "description": "Hiển thị lịch trực vào thứ 7 mỗi tuần và chỉnh sửa danh sách thành viên",
+    "permissions": [
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "options_page": "options.html",
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
+}
