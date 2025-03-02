@@ -1,5 +1,7 @@
+const SERVER_URL = "https://cleaning-schedule-extension.onrender.com"
+
 async function fetchMembers() {
-  const response = await fetch("http://localhost:3000/getMembers");
+  const response = await fetch(SERVER_URL + "/getMembers");
   const members = await response.json();
   return members;
 }
@@ -32,7 +34,7 @@ function renderSchedule() {
       cellMember.textContent =
         members[
           Math.floor((date - today) / (7 * 24 * 60 * 60 * 1000)) %
-            members.length
+          members.length
         ]?.name || "Chưa phân công";
       date.setDate(date.getDate() + 7);
     }
