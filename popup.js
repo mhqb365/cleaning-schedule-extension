@@ -1,9 +1,7 @@
-function fetchMembers() {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(["members"], (result) => {
-      resolve(result.members || []);
-    });
-  });
+async function fetchMembers() {
+  const response = await fetch("http://localhost:3000/getMembers");
+  const members = await response.json();
+  return members;
 }
 
 function renderSchedule() {
