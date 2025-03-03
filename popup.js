@@ -1,3 +1,4 @@
+// const SERVER_URL = "http://localhost:3000";
 const SERVER_URL = "https://cleaning-schedule-extension.onrender.com"
 
 async function fetchMembers() {
@@ -36,7 +37,7 @@ function renderSchedule() {
       cellMember.textContent =
         members[
           Math.floor((date - today) / (7 * 24 * 60 * 60 * 1000)) %
-          members.length
+            members.length
         ]?.name || "Chưa phân công";
       date.setDate(date.getDate() + 7);
     }

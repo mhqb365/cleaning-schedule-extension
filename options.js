@@ -1,4 +1,5 @@
-const SERVER_URL = "https://cleaning-schedule-extension.onrender.com"
+// const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = "https://cleaning-schedule-extension.onrender.com";
 
 function showLoading() {
   document.getElementById("loading").style.display = "block";
@@ -8,9 +9,25 @@ function hideLoading() {
   document.getElementById("loading").style.display = "none";
 }
 
+function saveCredentials(user, password) {
+  localStorage.setItem("user", user);
+  localStorage.setItem("password", password);
+}
+
+function getCredentials() {
+  return {
+    user: localStorage.getItem("user"),
+    password: localStorage.getItem("password"),
+  };
+}
+
 async function fetchMembers() {
   showLoading();
-  const response = await fetch(SERVER_URL + "/getMembers");
+  const response = await fetch(SERVER_URL + "/getMembers", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   const members = await response.json();
   hideLoading();
   return members;
@@ -18,10 +35,14 @@ async function fetchMembers() {
 
 async function saveMembers(members) {
   showLoading();
+
+  const credentials = getCredentials();
+  // console.log(credentials);
   await fetch(SERVER_URL + "/saveMembers", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      credentials: JSON.stringify(credentials),
     },
     body: JSON.stringify({ members }),
   });
@@ -106,10 +127,10 @@ async function importMembers(event) {
           await saveMembers(members);
           renderMembers();
         } else {
-          alert("Dữ liệu không hợp lệ!");
+          alert("Dữ liệu không hợp lệ");
         }
       } catch (e) {
-        alert("Dữ liệu không hợp lệ!");
+        alert("Dữ liệu không hợp lệ");
       }
     };
     reader.readAsText(file);
@@ -161,6 +182,15 @@ async function renderMembers() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Load saved credentials
+  const credentials = getCredentials();
+  if (credentials.user) {
+    document.getElementById("user").value = credentials.user;
+  }
+  if (credentials.password) {
+    document.getElementById("password").value = credentials.password;
+  }
+
   document.getElementById("addMemberBtn").addEventListener("click", addMember);
   document
     .getElementById("importFile")
@@ -171,5 +201,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("clearMembersBtn")
     .addEventListener("click", clearMembers);
+  document
+    .getElementById("saveCredentialsBtn")
+    .addEventListener("click", () => {
+      const user = document.getElementById("user").value;
+      const password = document.getElementById("password").value;
+      saveCredentials(user, password);
+      alert("Đã lưu tài khoản quản lý");
+    });
+
+  document.getElementById("togglePassword").addEventListener("click", () => {
+    const passwordInput = document.getElementById("password");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
+  });
+
   renderMembers();
 });

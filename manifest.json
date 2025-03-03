@@ -4,8 +4,7 @@
     "version": "1.0",
     "description": "Hiển thị lịch trực vệ sinh vào thứ 7 hàng tuần",
     "permissions": [
-        "storage",
-        "sidePanel"
+        "storage"
     ],
     "background": {
         "service_worker": "background.js"
@@ -17,9 +16,6 @@
             "48": "icons/logo-48.png",
             "128": "icons/logo-128.png"
         }
-    },
-    "side_panel": {
-        "default_path": "sidepanel.html"
     },
     "options_page": "options.html",
     "content_security_policy": {

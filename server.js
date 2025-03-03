@@ -1,42 +1,58 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fs = require("fs");
+const fs = require("fs").promises; // Using promises for cleaner async code
 const cors = require("cors");
-const app = express();
-const port = 3000;
 
+// Constants
+const PORT = 3000;
+const MEMBERS_FILE = "members.json";
+
+// App setup
+const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post("/save", (req, res) => {
-  const data = req.body;
-  fs.writeFile("data.json", JSON.stringify(data), (err) => {
-    if (err) {
-      return res.status(500).send("Error saving data");
-    }
-    res.send("Data saved successfully");
-  });
-});
+// Authentication middleware
+const authenticate = (req, res, next) => {
+  try {
+    const credentials = JSON.parse(req.headers.credentials);
+    const { user, password } = credentials;
 
-app.post("/saveMembers", (req, res) => {
-  const members = req.body.members;
-  fs.writeFile("members.json", JSON.stringify(members, null, 2), (err) => {
-    if (err) {
-      return res.status(500).send("Error saving members");
+    if (user === process.env.USER && password === process.env.PASSWORD) {
+      return next();
     }
+
+    res.status(401).send("Unauthorized");
+  } catch (error) {
+    res.status(400).send("Invalid credentials format");
+  }
+};
+
+// Route handlers
+const saveMembers = async (req, res) => {
+  try {
+    const { members } = req.body;
+    await fs.writeFile(MEMBERS_FILE, JSON.stringify(members, null, 2));
     res.send("Members saved successfully");
-  });
-});
+  } catch (error) {
+    res.status(500).send("Error saving members");
+  }
+};
 
-app.get("/getMembers", (req, res) => {
-  fs.readFile("members.json", "utf8", (err, data) => {
-    if (err) {
-      return res.status(500).send("Error reading members");
-    }
-    res.send(JSON.parse(data));
-  });
-});
+const getMembers = async (req, res) => {
+  try {
+    const data = await fs.readFile(MEMBERS_FILE, "utf8");
+    res.json(JSON.parse(data));
+  } catch (error) {
+    res.status(500).send("Error reading members");
+  }
+};
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// Routes
+app.post("/saveMembers", authenticate, saveMembers);
+app.get("/getMembers", getMembers);
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
