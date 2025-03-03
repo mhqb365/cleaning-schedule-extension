@@ -1,12 +1,23 @@
 const SERVER_URL = "https://cleaning-schedule-extension.onrender.com"
 
+function showLoading() {
+  document.getElementById("loading").style.display = "block";
+}
+
+function hideLoading() {
+  document.getElementById("loading").style.display = "none";
+}
+
 async function fetchMembers() {
+  showLoading();
   const response = await fetch(SERVER_URL + "/getMembers");
   const members = await response.json();
+  hideLoading();
   return members;
 }
 
 async function saveMembers(members) {
+  showLoading();
   await fetch(SERVER_URL + "/saveMembers", {
     method: "POST",
     headers: {
@@ -14,6 +25,7 @@ async function saveMembers(members) {
     },
     body: JSON.stringify({ members }),
   });
+  hideLoading();
 }
 
 async function addMember() {
@@ -105,6 +117,7 @@ async function importMembers(event) {
 }
 
 async function exportMembers() {
+  showLoading();
   const members = await fetchMembers();
   const blob = new Blob([JSON.stringify(members, null, 2)], {
     type: "application/json",
@@ -115,6 +128,7 @@ async function exportMembers() {
   a.download = "members.json";
   a.click();
   URL.revokeObjectURL(url);
+  hideLoading();
 }
 
 async function clearMembers() {
@@ -123,6 +137,7 @@ async function clearMembers() {
 }
 
 async function renderMembers() {
+  showLoading();
   const members = await fetchMembers();
   const membersList = document.getElementById("members");
   membersList.innerHTML = "";
@@ -142,6 +157,7 @@ async function renderMembers() {
   });
 
   enableDragAndDrop();
+  hideLoading();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

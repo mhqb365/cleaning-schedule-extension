@@ -81,6 +81,19 @@
             justify-content: space-between;
             margin-bottom: 20px;
         }
+
+        #loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -101,6 +114,7 @@
             <ul id="members"></ul>
         </div>
     </div>
+    <div id="loading">Loading...</div>
     <script src="options.js"></script>
 </body>
 
