@@ -8,7 +8,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            /* background-color: #f4f4f4; */
             margin: 0;
             padding: 0;
             min-width: 300px;
@@ -43,6 +42,11 @@
         .schedule-table th {
             background-color: #f2f2f2;
         }
+
+        #loading {
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 
@@ -50,6 +54,7 @@
     <div class="container">
         <h1>Lịch Trực Vệ Sinh</h1>
         <div class="schedule">
+            <div id="loading">Đang tải danh sách thành viên...</div>
             <table class="schedule-table" id="scheduleTable"></table>
         </div>
     </div>

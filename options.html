@@ -81,26 +81,89 @@
             justify-content: space-between;
             margin-bottom: 20px;
         }
+
+        #loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .password-container {
+            position: relative;
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .password-container input {
+            width: 100%;
+            box-sizing: border-box;
+            padding-right: 30px;
+            /* Để chừa chỗ cho nút toggle */
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            width: 24px;
+            height: 24px;
+            line-height: 1;
+            opacity: 0.5;
+            margin-right: 10px;
+        }
+
+        .toggle-password:hover {
+            opacity: 1;
+        }
+
+        /* Loại bỏ border và outline khi focus vào nút toggle */
+        .toggle-password:focus {
+            outline: none;
+            border: none;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Chỉnh Sửa Thành Viên</h1>
         <div class="form-group">
-            <input type="text" id="memberName" placeholder="Tên thành viên">
-            <button id="addMemberBtn">Thêm Thành Viên</button>
+            <input type="text" id="user" placeholder="User">
+            <div class="password-container">
+                <input type="password" id="password" placeholder="Password">
+                <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+            </div>
+            <button id="saveCredentialsBtn">Lưu TK Quản Lý</button>
         </div>
+        <h1>Chỉnh Sửa Thành Viên</h1>
         <div class="import-export">
             <input type="file" id="importFile" style="flex: 1; margin-right: 10px;">
             <button id="exportMembersBtn">Xuất Danh Sách</button>
             <button id="clearMembersBtn">Xóa Tất Cả</button>
+        </div>
+        <div class="form-group">
+            <input type="text" id="memberName" placeholder="Tên thành viên">
+            <button id="addMemberBtn">Thêm Thành Viên</button>
         </div>
         <div class="member-list">
             <h2>Danh Sách Thành Viên</h2>
             <ul id="members"></ul>
         </div>
     </div>
+    <div id="loading">Loading...</div>
     <script src="options.js"></script>
 </body>
 

@@ -1,11 +1,15 @@
+// const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = "https://cleaning-schedule-extension.onrender.com"
+
 async function fetchMembers() {
-  const response = await fetch("http://localhost:3000/getMembers");
+  const response = await fetch(SERVER_URL + "/getMembers");
   const members = await response.json();
   return members;
 }
 
 function renderSchedule() {
   const scheduleTable = document.getElementById("scheduleTable");
+  const loadingElement = document.getElementById("loading");
   scheduleTable.innerHTML = "";
   const headerRow = scheduleTable.insertRow();
   const headers = ["Ngày", "Thành viên"];
@@ -14,6 +18,7 @@ function renderSchedule() {
     th.textContent = header;
     headerRow.appendChild(th);
   });
+  loadingElement.style.display = "block"; // Show loading effect
   fetchMembers().then((members) => {
     const today = new Date();
     let date = new Date(today);
@@ -36,6 +41,7 @@ function renderSchedule() {
         ]?.name || "Chưa phân công";
       date.setDate(date.getDate() + 7);
     }
+    loadingElement.style.display = "none"; // Hide loading effect
   });
 }
 
